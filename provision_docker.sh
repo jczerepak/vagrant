@@ -4,20 +4,20 @@
 
 # install required package
 sudo yum install -y yum-utils \
-  device-mapper-persistent-data \
-  lvm2
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum makecache fast
+  device-mapper-persistent-data 
+
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum makecache fast
 
 # install and start docker
-yum install -y docker-ce docker-ce-cli containerd.io
+sudo yum install -y docker-ce docker-ce-cli containerd.io
 systemctl enable docker
 systemctl start docker
 
 # add the current user to docker group
 # https://docs.docker.com/engine/install/linux-postinstall/
 sudo groupadd docker
-sudo usermod -aG docker $USER
+sudo usermod -aG docker vagrant
 
 # install docker-compose 
 # https://docs.docker.com/compose/install/
@@ -31,12 +31,12 @@ curl -L https://raw.githubusercontent.com/docker/compose/1.27.4/contrib/completi
 
 
 # other tools
-yum install -y vim
-yum install -y net-tools
+sudo yum install -y vim
+sudo yum install -y net-tools
 
 # timezone
-timedatectl set-timezone CET
-yum install -y ntpdate
+sudo timedatectl set-timezone CET
+sudo yum install -y ntpdate
 
 # expose docker to tcp://127.0.0.1:2375
 # https://docs.docker.com/engine/install/linux-postinstall/
@@ -45,5 +45,5 @@ tee /usr/lib/systemd/system/docker.service <<-'EOF'
 ExecStart=
 ExecStart=/usr/bin/dockerd -H unix:// -H tcp://127.0.0.1:2375
 EOF
-systemctl daemon-reload
+sudo systemctl daemon-reload
 
